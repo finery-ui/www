@@ -1,0 +1,57 @@
+import { useEffect, useMemo, useState } from 'react'
+import Head from 'next/head'
+import { Orderbook, OrderbookColumns, Alert } from '@finery/components'
+
+import { DefaultLayout } from 'src/layouts'
+
+type OrderbookItem = [price: string, amount: string]
+
+const columns: OrderbookColumns<OrderbookItem> = {
+  price: {
+    label: 'Price (USD)',
+    valueGetter: item => Number(item[0]),
+  },
+  amount: {
+    label: 'Amount (BTC)',
+    valueGetter: item => item[1],
+  },
+  total: {
+    label: 'Total (USD)',
+    valueGetter: item => Number(item[0]) * Number(item[1]),
+  },
+}
+
+export default function OrderbookPage() {
+  const [orderbook, setOrderbook] = useState({
+    bids: [],
+    asks: [],
+  })
+  const [depth, setDepth] = useState(50)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetch('/orderbook.json', { headers: { 'content-type': 'application/json' } })
+      .then(r => r.json())
+      .then(setOrderbook)
+      .catch(err => {
+        console.error(err)
+        setError(err.toString())
+      })
+  }, [])
+
+  // Bids are sorted hi->lo.
+  const bids = useMemo(() => orderbook.bids.slice(0, depth), [orderbook, depth])
+  // Asks are sorted lo->hi.
+  const asks = useMemo(() => orderbook.asks.slice(0, depth), [orderbook, depth])
+
+  return (
+    <DefaultLayout>
+      <Head>
+        <title>Finery UI - Orderbook</title>
+      </Head>
+
+      {error && <Alert emphasis="error">{error}</Alert>}
+      <Orderbook columns={columns} bids={bids} asks={asks} />
+    </DefaultLayout>
+  )
+}
