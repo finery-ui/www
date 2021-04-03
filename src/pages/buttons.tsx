@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Button, ButtonGroup, Stack } from '@finery/components'
+import { Button, ButtonGroup, Stack } from '@finery/core'
 import { FiMail, FiCopy } from 'react-icons/fi'
 
 import { DefaultLayout } from 'src/layouts'

@@ -1,14 +1,14 @@
 import { useEffect } from 'react'
-import { useProxy } from 'valtio'
+import { useSnapshot } from 'valtio'
 import styled from '@emotion/styled'
 import { AiOutlineArrowRight } from 'react-icons/ai'
-import { IconButton } from '@finery/components'
+import { IconButton } from '@finery/core'
 
 import { globalState } from 'src/state'
 import { CodeHighlight } from 'src/components'
 
 export function CodePullout() {
-  const { codebarOpen, code } = useProxy(globalState)
+  const { codebarOpen, code } = useSnapshot(globalState)
 
   useEffect(() => {
     function closeOnEscape(e: KeyboardEvent) {

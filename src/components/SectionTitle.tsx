@@ -35,7 +35,7 @@ const Title = styled.h3`
   margin-top: 3em;
   margin-bottom: 0.5em;
 
-  &:first-child {
+  &:first-of-type {
     margin-top: 0;
   }
 

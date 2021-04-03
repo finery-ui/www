@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { Grid, Button, useColumns, Stack } from '@finery/components'
+import { Grid, Button, useColumns, Stack } from '@finery/core'
 
 import { DefaultLayout } from 'src/layouts'
 import { CodeHighlight, DemoCard, SectionTitle } from 'src/components'

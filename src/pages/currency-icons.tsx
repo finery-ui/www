@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { Stack } from '@finery/components'
-import * as allIcons from 'ccy-icons'
+import { Stack } from '@finery/core'
+import * as allIcons from '@finery/ccy-icons'
 
 import { DefaultLayout } from 'src/layouts'
 import { DemoCard } from 'src/components'

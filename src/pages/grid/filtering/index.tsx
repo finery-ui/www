@@ -13,8 +13,8 @@ import {
   GridFilterProps,
   clientFilter,
   createStringFilter,
-} from '@finery/components'
-import * as allIcons from 'ccy-icons'
+} from '@finery/core'
+import * as allIcons from '@finery/ccy-icons'
 
 import { DefaultLayout } from 'src/layouts'
 import { CodeHighlight, DemoCard, SectionTitle } from 'src/components'

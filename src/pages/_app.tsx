@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
 import Head from 'next/head'
 import { AppProps } from 'next/app'
-import { useProxy } from 'valtio'
-import { Provider, lightTheme, darkTheme } from '@finery/components'
+import { useSnapshot } from 'valtio'
+import { Provider, lightTheme, darkTheme } from '@finery/core'
 
 import { globalState } from 'src/state'
 
-import '@finery/components/dist/styles.css'
+import '@finery/core/dist/styles.css'
 import 'src/styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { theme } = useProxy(globalState)
+  const { theme } = useSnapshot(globalState)
 
   useEffect(() => {
     if (theme === 'light') {

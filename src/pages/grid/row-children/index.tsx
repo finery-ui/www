@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { AiOutlineRight, AiOutlineDown } from 'react-icons/ai'
-import { Grid, Button, useColumns } from '@finery/components'
+import { Grid, Button, useColumns } from '@finery/core'
 
 import { DefaultLayout } from 'src/layouts'
 import { CodeHighlight, DemoCard } from 'src/components'

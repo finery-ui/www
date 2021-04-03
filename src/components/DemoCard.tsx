@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import styled from '@emotion/styled'
-import { IconButton } from '@finery/components'
+import { IconButton } from '@finery/core'
 import reactElementToJSXString from 'react-element-to-jsx-string'
 import { RiCodeSSlashLine } from 'react-icons/ri'
 import { BiCopy } from 'react-icons/bi'

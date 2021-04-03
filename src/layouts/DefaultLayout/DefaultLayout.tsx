@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import styled from '@emotion/styled'
-import { useProxy } from 'valtio'
+import { useSnapshot } from 'valtio'
 import { WiMoonAltWaxingCrescent1, WiMoonAltWaxingGibbous6 } from 'react-icons/wi'
 import { RiMenuFoldLine, RiMenuUnfoldLine } from 'react-icons/ri'
-import { Button } from '@finery/components'
+import { Button } from '@finery/core'
 
 import { globalState } from 'src/state'
 import { CodePullout, Logo } from 'src/components'
@@ -17,7 +17,7 @@ interface DefaultLayoutProps {
 const MAX_WIDTH = '1200px'
 
 export function DefaultLayout({ children }: DefaultLayoutProps) {
-  const { theme, sidebarOpen } = useProxy(globalState)
+  const { theme, sidebarOpen } = useSnapshot(globalState)
 
   function toggleSidebar() {
     globalState.sidebarOpen = !sidebarOpen

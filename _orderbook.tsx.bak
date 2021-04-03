@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import Head from 'next/head'
-import { Orderbook, OrderbookColumns, Alert } from '@finery/components'
+import { Orderbook, OrderbookColumns, Alert } from '@finery/core'
 
 import { DefaultLayout } from 'src/layouts'
 

@@ -10,7 +10,7 @@
   "dependencies": {
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
-    "ccy-icons": "^1.0.2",
+    "@finery/ccy-icons": "^1.0.3",
     "clsx": "^1.1.1",
     "color-hash": "^1.0.3",
     "common-tags": "^1.8.0",
