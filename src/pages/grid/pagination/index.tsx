@@ -1,14 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
+import {
+  HiOutlineChevronDoubleLeft,
+  HiOutlineChevronDoubleRight,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+} from 'react-icons/hi'
 import Head from 'next/head'
-import Link from 'next/link'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import ColorHash from 'color-hash'
-import { Grid, Alert, Button, useColumns, Stack } from '@finery/core'
+import { Grid, useColumns, Alert, Button, Input } from '@finery/core'
 import * as allIcons from '@finery/ccy-icons'
 
 import { DefaultLayout } from 'src/layouts'
-import { CodeHighlight, DemoCard, SectionTitle, ExternalLink } from 'src/components'
+import { CodeHighlight, DemoCard, SectionTitle, ExternalLink, code } from 'src/components'
 
 interface Market {
   id: string
@@ -42,8 +47,11 @@ const lng = typeof navigator !== 'undefined' ? navigator.language : 'en-US'
 const nFmt8 = new Intl.NumberFormat(lng, { maximumFractionDigits: 8 }).format
 const colorHash = new ColorHash({ lightness: 0.5 })
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
+}
+
 export default function GridPaginationPage() {
-  const [page, setPage] = useState(1)
   const [data, setData] = useState<Market[]>([])
   const { columns } = useColumns<Market>(
     () => [
@@ -131,6 +139,10 @@ export default function GridPaginationPage() {
     defaultColumn
   )
   const [error, setError] = useState('')
+  const [pageIndex, setPageIndex] = useState(0)
+  const totalPages = Math.ceil(data.length ? data.length / PAGE_SIZE : 0)
+  const lastPageIndex = totalPages - 1
+  const pageClamp = (n: number) => clamp(n, 0, lastPageIndex)
 
   useEffect(() => {
     fetch('/products.json', { headers: { 'content-type': 'application/json' } })
@@ -142,10 +154,46 @@ export default function GridPaginationPage() {
       })
   }, [])
 
-  const paginatedData = useMemo(() => data.slice(page, page * PAGE_SIZE), [page, data])
+  const paginatedData = useMemo(
+    () => data.slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE),
+    [pageIndex, data]
+  )
 
   function renderFooter() {
-    return <div>I am FOOTER!!!</div>
+    return (
+      <Pagination>
+        <Button emphasis="ghost" disabled={pageIndex === 0} onClick={() => setPageIndex(0)}>
+          <HiOutlineChevronDoubleLeft />
+        </Button>
+        <Button
+          emphasis="ghost"
+          disabled={pageIndex === 0}
+          onClick={() => setPageIndex(pageClamp(pageIndex - 1))}
+        >
+          <HiOutlineChevronLeft />
+        </Button>
+        <Input
+          type="number"
+          value={String(pageIndex + 1)}
+          css={{ width: 80 }}
+          onChange={e => setPageIndex(pageClamp(Number(e.target.value) - 1))}
+        />
+        <Button
+          emphasis="ghost"
+          disabled={pageIndex === lastPageIndex}
+          onClick={() => setPageIndex(pageClamp(pageIndex + 1))}
+        >
+          <HiOutlineChevronRight />
+        </Button>
+        <Button
+          emphasis="ghost"
+          disabled={pageIndex === lastPageIndex}
+          onClick={() => setPageIndex(lastPageIndex)}
+        >
+          <HiOutlineChevronDoubleRight />
+        </Button>
+      </Pagination>
+    )
   }
 
   return (
@@ -153,6 +201,19 @@ export default function GridPaginationPage() {
       <Head>
         <title>Finery UI - Grid</title>
       </Head>
+
+      <SectionTitle id="basic-setup">Setting up pagination</SectionTitle>
+
+      <p>
+        Since data is controlled and pagination could be handled on the client or server, you are in
+        full control of it. This also means that how you render the pagination is up to you since
+        there are many ways to do it.
+      </p>
+
+      <p>
+        In the example below we paginate data on the client (simply a slice of the data), and use
+        the <code>Button</code> and <code>Input</code> components provided by the library.
+      </p>
 
       <DemoCard
         title="Default grid"
@@ -170,13 +231,34 @@ export default function GridPaginationPage() {
         )}
       </DemoCard>
 
-      <SectionTitle id="basic-setup">Basic setup</SectionTitle>
+      <p>The key steps above are:</p>
 
-      <CodeHighlight code={basicRequiredSetup} />
+      <ul>
+        <li>Create state to hold the current page index.</li>
+        <li>Slice the data based on the page index.</li>
+        <li>
+          Render pagination controls which set the page index and pass them into the grid via the{' '}
+          <code>footerNode</code> prop.
+        </li>
+      </ul>
 
-      <SectionTitle id="grid-props">Grid Props</SectionTitle>
+      <SectionTitle id="grid-props">Server side pagination</SectionTitle>
 
-      <p>Todo</p>
+      <p>
+        As with sorting and filtering instead of <code>useMemo</code> switch to using{' '}
+        <code>useEffect</code> for requesting the new page of data.
+      </p>
+
+      <CodeHighlight
+        code={code`
+        useEffect(() => {
+          setLoading(true)
+          fetchPagedData(pageIndex, PAGE_SIZE)
+            .then(setData)
+            .finally(() => setLoading(false))
+        }, [pageIndex])
+      `}
+      />
     </DefaultLayout>
   )
 }
@@ -196,4 +278,13 @@ const marketIconStyle = css`
   max-width: 100%;
   max-height: 100%;
   color: white;
+`
+
+const Pagination = styled.div`
+  display: flex;
+  justify-content: flex-end;
+
+  & > *:not(:last-child) {
+    margin-right: 0.5em;
+  }
 `
